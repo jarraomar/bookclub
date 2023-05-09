@@ -6,8 +6,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import hu.ait.bookclub.ui.screen.bookshelf.Bookshelf
+import hu.ait.bookclub.ui.screen.discussion.Discussion
 import hu.ait.bookclub.ui.screen.loginscreen.LoginScreen
 import hu.ait.bookclub.ui.screen.mainpage.MainScreen
+import hu.ait.bookclub.ui.screen.readinglist.ReadingList
 
 @Composable
 fun NavGraph(
@@ -25,7 +28,19 @@ fun NavGraph(
         }
 
         composable(Screen.Main.route) {
-            MainScreen()
+            MainScreen(navController = navController)
+        }
+
+        composable(Screen.ReadingList.route) {
+            ReadingList(navController = navController)
+        }
+
+        composable(Screen.Bookshelf.route) {
+            Bookshelf(navController = navController)
+        }
+
+        composable(Screen.Discussion.route) {
+            Discussion(navController = navController)
         }
 
     }

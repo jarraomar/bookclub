@@ -1,4 +1,4 @@
-package hu.ait.bookclub.ui
+package hu.ait.bookclub.ui.screen.mainpage
 
 import android.app.appsearch.SearchResult
 import com.google.android.gms.common.api.Response
@@ -14,7 +14,7 @@ class MainScreenViewModel {
             @Query("q") query: String,
             @Query("maxResults") maxResults: Int,
             @Query("orderBy") orderBy: String
-        ): retrofit2.Response<hu.ait.bookclub.ui.MainScreenViewModel.SearchResults>
+        ): retrofit2.Response<SearchResults>
     }
 
     //Api responses

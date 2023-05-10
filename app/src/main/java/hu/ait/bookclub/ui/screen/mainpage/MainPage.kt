@@ -26,7 +26,7 @@ import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import hu.ait.bookclub.R
 import hu.ait.bookclub.data.Book
-import hu.ait.bookclub.ui.MainScreenViewModel
+import hu.ait.bookclub.ui.screen.mainpage.MainScreenViewModel
 import hu.ait.bookclub.ui.navigation.Screen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

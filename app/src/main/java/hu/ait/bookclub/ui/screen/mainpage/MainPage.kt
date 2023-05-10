@@ -1,5 +1,6 @@
 package hu.ait.bookclub.ui.screen.mainpage
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
@@ -167,6 +168,7 @@ fun TopTrendingBooks() {
 
 @Composable
 fun BookCoverImage(url: String) {
+    Log.d("BookCoverImage", "Loading image from URL: $url")
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(url)

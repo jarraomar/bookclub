@@ -12,10 +12,13 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import hu.ait.bookclub.ui.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -52,7 +55,7 @@ fun MainScreen() {
                     "Discussion"
                 )
 
-                var selectedTabIndex by remember { mutableStateOf(0) }
+                var selectedTabIndex by remember { mutableStateOf(3) }
 
                 TabRow(
                     selectedTabIndex = selectedTabIndex,
@@ -60,7 +63,23 @@ fun MainScreen() {
                     tabs.forEachIndexed { index, title ->
                         Tab(
                             selected = selectedTabIndex == index,
-                            onClick = { selectedTabIndex = index }
+                            onClick = {
+                                selectedTabIndex = index;
+                                when(selectedTabIndex) {
+                                    0 -> {
+                                        // Show reading list section
+                                        navController.navigate(Screen.ReadingList.route)
+                                    }
+                                    1 -> {
+                                        // Show bookshelf section
+                                        navController.navigate(Screen.Bookshelf.route)
+                                    }
+                                    2 -> {
+                                        // Show discussion section
+                                        navController.navigate(Screen.Discussion.route)
+                                    }
+                                }
+                            }
                         ) {
                             Text(text = title)
                         }
@@ -68,21 +87,6 @@ fun MainScreen() {
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
-
-                when(selectedTabIndex) {
-                    0 -> {
-                        // Show reading list section
-                        Text(text = "Reading List")
-                    }
-                    1 -> {
-                        // Show bookshelf section
-                        Text(text = "Bookshelf")
-                    }
-                    2 -> {
-                        // Show discussion section
-                        Text(text = "Discussion")
-                    }
-                }
             }
         }
     )

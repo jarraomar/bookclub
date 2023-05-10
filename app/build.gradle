@@ -2,6 +2,9 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
+
+    id 'com.google.devtools.ksp' version "1.8.0-1.0.9"
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.10'
 }
 
 android {
@@ -14,6 +17,8 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
+
+        compileSdkPreview = "UpsideDownCake"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

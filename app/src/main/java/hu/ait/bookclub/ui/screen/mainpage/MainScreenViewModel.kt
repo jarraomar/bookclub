@@ -1,6 +1,5 @@
 package hu.ait.bookclub.ui.screen.mainpage
 
-import android.app.appsearch.SearchResult
 import com.google.android.gms.common.api.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

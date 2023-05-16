@@ -44,14 +44,14 @@ fun WriteDiscussionScreen(
     ) {
         OutlinedTextField(value = postTitle,
             modifier = Modifier.fillMaxWidth(),
-            label = { Text(text = "Post title") },
+            label = { Text(text = "Discussion Post title") },
             onValueChange = {
                 postTitle = it
             }
         )
         OutlinedTextField(value = postBody,
             modifier = Modifier.fillMaxWidth(),
-            label = { Text(text = "Post body") },
+            label = { Text(text = "Discussion Post body") },
             onValueChange = {
                 postBody = it
             }
@@ -61,6 +61,18 @@ fun WriteDiscussionScreen(
         }
         ) {
             Text(text = "Upload")
+        }
+
+        when (writeDiscussionViewModel.writeDiscussionUIState) {
+            is WriteDiscussionState.LoadingPostUpload -> CircularProgressIndicator()
+            is WriteDiscussionState.PostUploadSuccess -> {
+                Text(text = "Post uploaded.")
+                onWriteDiscussionSuccess()
+            }
+            is WriteDiscussionState.ErrorDuringPostUpload ->
+                Text(text = "${(
+                        writeDiscussionViewModel.writeDiscussionUIState as WriteDiscussionState.ErrorDuringPostUpload).error}")
+            else -> {}
         }
     }
 }

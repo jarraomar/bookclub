@@ -51,4 +51,10 @@ class DiscussionScreenViewModel : ViewModel() {
         }
     }
 
+    fun deletePost(postKey: String) {
+        FirebaseFirestore.getInstance().collection(
+            WriteDiscussionViewModel.COLLECTION_POSTS
+        ).document(postKey).delete()
+    }
+
 }

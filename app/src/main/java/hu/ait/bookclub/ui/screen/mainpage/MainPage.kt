@@ -19,6 +19,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import hu.ait.bookclub.data.Book
+import hu.ait.bookclub.data.ScreensViewModel
 import hu.ait.bookclub.ui.navigation.Screen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -124,7 +125,7 @@ fun TopTrendingBooks() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-    val service = retrofit.create(MainScreenViewModel.GoogleBooksService::class.java)
+    val service = retrofit.create(ScreensViewModel.GoogleBooksService::class.java)
 
     var books by remember { mutableStateOf(listOf<Book>()) }
 

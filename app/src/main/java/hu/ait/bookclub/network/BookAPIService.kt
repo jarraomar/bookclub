@@ -2,8 +2,10 @@ package hu.ait.bookclub.network
 
 import okhttp3.MediaType.Companion.toMediaType
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import hu.ait.bookclub.data.ScreensViewModel
 import kotlinx.serialization.json.Json
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -25,5 +27,4 @@ object BookAPi{
 
 
 interface BookAPIService{
-
 }

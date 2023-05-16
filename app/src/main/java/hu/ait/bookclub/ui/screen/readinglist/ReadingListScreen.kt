@@ -91,7 +91,7 @@ fun ReadingList(navController: NavController) {
         if (userId != null) {
             val readingList = loginViewModel.getReadingList(userId)
             if (readingList != null) {
-                bookList = bookList.toMutableList().apply { addAll(readingList) }
+                bookList = readingList
             }
         }
     }
@@ -170,6 +170,12 @@ fun ReadingList(navController: NavController) {
                                                         bookList = bookList + editValue
                                                     }
                                                     editValue = ""
+
+                                                    val userId = FirebaseAuth.getInstance().currentUser?.uid
+                                                    if (userId != null) {
+                                                        loginViewModel.saveReadingList(userId, bookList)
+                                                    }
+
                                                 }
                                                 showReadingListContent = true
                                             },
@@ -204,6 +210,8 @@ fun ReadingListContent(bookList: List<String>, onBookClick: (Int, String) -> Uni
     var showDialog by remember { mutableStateOf(false) }
     var editedBookName by remember { mutableStateOf("") }
     var selectedIndex by remember { mutableStateOf(0) }
+
+    val loginViewModel: LoginViewModel = viewModel()
 
     LaunchedEffect(bookList) {
         // Fetch book information for each book in the list
@@ -276,6 +284,11 @@ fun ReadingListContent(bookList: List<String>, onBookClick: (Int, String) -> Uni
                             updatedBookList.removeAt(index)
                             books = updatedBookList
                             onBookDelete(index)
+
+                            val userId = FirebaseAuth.getInstance().currentUser?.uid
+                            if (userId != null) {
+                                loginViewModel.saveReadingList(userId, bookList)
+                            }
 
                         }
                     ) {

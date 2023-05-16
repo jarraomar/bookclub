@@ -65,35 +65,57 @@ class LoginViewModel() : ViewModel() {
         }
     }
 
-    suspend fun getReadingList(userId: String): List<String>? {
-        return try {
-            val user = auth.currentUser
-            val document = db.collection("users").document(userId).get().await()
-            val userData = document.toObject<hu.ait.bookclub.data.User>()
+//    suspend fun getReadingList(userId: String): List<String>? {
+//        return try {
+//            val user = auth.currentUser
+//            val document = db.collection("users").document(userId).get().await()
+//            val userData = document.toObject<hu.ait.bookclub.data.User>()
+//
+//            Log.d("LoginViewModel", "User: $user")
+//            Log.d("LoginViewModel", "User UID: ${user?.uid}")
+//
+//            if (user?.uid == userId && userData != null) {
+//                // User data retrieved successfully
+//                userData.readingList
+//            } else {
+//                // Invalid user or user data is null
+//                null
+//            }
+//        } catch (e: Exception) {
+//            // Handle any errors
+//            null
+//        }
+//    }
 
-            Log.d("LoginViewModel", "User: $user")
-            Log.d("LoginViewModel", "User UID: ${user?.uid}")
+//    suspend fun addBookToReadingList(userId: String, bookTitle: String) {
+//        val documentRef = db.collection("users").document(userId)
+//        db.runTransaction { transaction ->
+//            val documentSnapshot = transaction.get(documentRef)
+//            val readingList = documentSnapshot.toObject<hu.ait.bookclub.data.User>()?.readingList ?: emptyList()
+//            transaction.update(documentRef, "readingList", readingList + bookTitle)
+//        }.await()
+//    }
 
-            if (user?.uid == userId && userData != null) {
-                // User data retrieved successfully
-                userData.readingList
-            } else {
-                // Invalid user or user data is null
-                null
+    fun saveReadingList(userId: String, readingList: List<String>) {
+        val userRef = db.collection("users").document(userId)
+        userRef.set(mapOf("readingList" to readingList))
+            .addOnSuccessListener {
+                Log.d("TAG", "Reading list saved successfully")
             }
-        } catch (e: Exception) {
-            // Handle any errors
-            null
-        }
+            .addOnFailureListener { e ->
+                Log.e("TAG", "Error saving reading list", e)
+            }
     }
 
-    suspend fun addBookToReadingList(userId: String, bookTitle: String) {
-        val documentRef = db.collection("users").document(userId)
-        db.runTransaction { transaction ->
-            val documentSnapshot = transaction.get(documentRef)
-            val readingList = documentSnapshot.toObject<hu.ait.bookclub.data.User>()?.readingList ?: emptyList()
-            transaction.update(documentRef, "readingList", readingList + bookTitle)
-        }.await()
+    suspend fun getReadingList(userId: String): List<String>? {
+        return try {
+            val userRef = db.collection("users").document(userId).get().await()
+            val readingList = userRef.data?.get("readingList") as? List<String>
+            readingList
+        } catch (e: Exception) {
+            Log.e("TAG", "Error retrieving reading list", e)
+            null
+        }
     }
 
 }

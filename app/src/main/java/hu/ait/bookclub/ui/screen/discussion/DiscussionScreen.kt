@@ -21,9 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.filled.ArrowBack
-
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
@@ -44,7 +42,7 @@ fun Discussion(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Discussion") },
+                title = { Text(text = "Discussion", fontFamily = FontFamily.Serif) },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate(Screen.Main.route) }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")

@@ -49,6 +49,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -99,7 +100,7 @@ fun ReadingList(navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Reading List") },
+                title = { Text(text = "Reading List", fontFamily = FontFamily.Serif) },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate(Screen.Main.route) }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")

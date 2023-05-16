@@ -1,17 +1,20 @@
 package hu.ait.bookclub.ui.navigation
 
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import hu.ait.bookclub.ui.screen.bookshelf.Bookshelf
 import hu.ait.bookclub.ui.screen.discussion.Discussion
+import hu.ait.bookclub.ui.screen.discussion.writediscussion.WriteDiscussionScreen
 import hu.ait.bookclub.ui.screen.loginscreen.LoginScreen
 import hu.ait.bookclub.ui.screen.mainpage.MainScreen
 import hu.ait.bookclub.ui.screen.readinglist.ReadingList
 
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun NavGraph(
     navController: NavHostController = rememberNavController(),
@@ -35,12 +38,16 @@ fun NavGraph(
             ReadingList(navController = navController)
         }
 
-        composable(Screen.Bookshelf.route) {
-            Bookshelf(navController = navController)
+        composable(Screen.Discussion.route) {
+            Discussion(navController = navController,{navController.navigate(Screen.WriteDiscussion.route)})
         }
 
-        composable(Screen.Discussion.route) {
-            Discussion(navController = navController)
+        composable(Screen.WriteDiscussion.route){
+            WriteDiscussionScreen(onWriteDiscussionSuccess= {
+                //navController.navigate(Screen.Main.route)
+                navController.popBackStack(Screen.Discussion.route,
+                    false)
+            })
         }
 
     }

@@ -62,7 +62,6 @@ fun MainScreen(
 
                 val tabs = listOf(
                     "Reading List",
-                    "Bookshelf",
                     "Discussion"
                 )
 
@@ -78,17 +77,12 @@ fun MainScreen(
                                 selectedTabIndex = index;
                                 when(selectedTabIndex) {
                                     0 -> {
-                                        // Show reading list section
                                         navController.navigate(Screen.ReadingList.route)
                                     }
                                     1 -> {
-                                        // Show bookshelf section
-                                        navController.navigate(Screen.Bookshelf.route)
-                                    }
-                                    2 -> {
-                                        // Show discussion section
                                         navController.navigate(Screen.Discussion.route)
                                     }
+
                                 }
                             }
                         ) {
@@ -161,7 +155,10 @@ fun TopTrendingBooks() {
 
                 Text(text = book.title, fontFamily = FontFamily.Serif, fontWeight = FontWeight.Bold, fontSize = 20.sp)
                 Text(text = book.author, fontFamily = FontFamily.Serif, fontSize = 14.sp)
+                Spacer(modifier = Modifier.height(15.dp))
                 BookCoverImage(url = book.imageUrl)
+                Spacer(modifier = Modifier.height(25.dp))
+
             }
         }
     }

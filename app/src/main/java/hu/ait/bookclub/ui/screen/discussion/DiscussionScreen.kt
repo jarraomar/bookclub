@@ -12,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -29,7 +30,7 @@ fun Discussion(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Discussion") },
+                title = { Text(text = "Discussion", fontFamily = FontFamily.Serif) },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate(Screen.Main.route) }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")

@@ -18,6 +18,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -119,6 +121,24 @@ fun ReadingList(navController: NavController) {
                         val updatedBookList = bookList.toMutableList()
                         updatedBookList.removeAt(index)
                         bookList = updatedBookList
+                    },
+                    onMoveBookUp = { index ->
+                        if (index > 0) {
+                            val updatedBookList = bookList.toMutableList()
+                            val temp = updatedBookList[index - 1]
+                            updatedBookList[index - 1] = updatedBookList[index]
+                            updatedBookList[index] = temp
+                            bookList = updatedBookList
+                        }
+                    },
+                    onMoveBookDown = { index ->
+                        if (index < bookList.size - 1) {
+                            val updatedBookList = bookList.toMutableList()
+                            val temp = updatedBookList[index + 1]
+                            updatedBookList[index + 1] = updatedBookList[index]
+                            updatedBookList[index] = temp
+                            bookList = updatedBookList
+                        }
                     }
                 )
             } else {
@@ -180,9 +200,14 @@ fun ReadingList(navController: NavController) {
     }
 }
 
-
 @Composable
-fun ReadingListContent(bookList: List<String>, onBookClick: (Int, String) -> Unit, onBookDelete: (Int) -> Unit) {
+fun ReadingListContent(
+    bookList: List<String>,
+    onBookClick: (Int, String) -> Unit,
+    onBookDelete: (Int) -> Unit,
+    onMoveBookUp: (Int) -> Unit,
+    onMoveBookDown: (Int) -> Unit
+) {
     val retrofit = remember {
         Retrofit.Builder()
             .baseUrl("https://www.googleapis.com/books/v1/")
@@ -213,12 +238,13 @@ fun ReadingListContent(bookList: List<String>, onBookClick: (Int, String) -> Uni
                     if (bookItems.isNotEmpty()) {
                         val bookItem = bookItems[0]
                         val imageUrl = bookItem.volumeInfo.imageLinks?.thumbnail ?: ""
-                        val updatedImageUrl = if (imageUrl.isNotEmpty() && imageUrl != bookItem.volumeInfo.imageLinks?.thumbnail) {
-                            // Book image URL has changed, force refresh the image by appending a timestamp query parameter
-                            "$imageUrl?timestamp=${System.currentTimeMillis()}"
-                        } else {
-                            imageUrl
-                        }
+                        val updatedImageUrl =
+                            if (imageUrl.isNotEmpty() && imageUrl != bookItem.volumeInfo.imageLinks?.thumbnail) {
+                                // Book image URL has changed, force refresh the image by appending a timestamp query parameter
+                                "$imageUrl?timestamp=${System.currentTimeMillis()}"
+                            } else {
+                                imageUrl
+                            }
                         Book(
                             id = bookItem.id,
                             title = bookItem.volumeInfo.title,
@@ -263,31 +289,46 @@ fun ReadingListContent(bookList: List<String>, onBookClick: (Int, String) -> Uni
                         Text(text = book.title, fontWeight = FontWeight.Bold)
                         Text(text = book.author)
                     }
-                    IconButton(
-                        onClick = {
-                            // Delete button click logic here
-                            val updatedBookList = books.toMutableList()
-                            updatedBookList.removeAt(index)
-                            books = updatedBookList
-                            onBookDelete(index)
-
-                            val userId = FirebaseAuth.getInstance().currentUser?.uid
-                            if (userId != null) {
-                                loginViewModel.saveReadingList(userId, bookList)
-                            }
-
+                    Row {
+                        IconButton(
+                            onClick = { onMoveBookUp(index) }
+                        ) {
+                            Icon(
+                                Icons.Default.KeyboardArrowUp,
+                                contentDescription = "Move Up"
+                            )
                         }
-                    ) {
-                        Icon(
-                            Icons.Default.Delete,
-                            contentDescription = "Delete",
-                            tint = Color.Red
-                        )
+                        IconButton(
+                            onClick = { onMoveBookDown(index) }
+                        ) {
+                            Icon(
+                                Icons.Default.KeyboardArrowDown,
+                                contentDescription = "Move Down"
+                            )
+                        }
+                        IconButton(
+                            onClick = {
+                                val updatedBookList = books.toMutableList()
+                                updatedBookList.removeAt(index)
+                                books = updatedBookList
+                                onBookDelete(index)
+
+                                val userId = FirebaseAuth.getInstance().currentUser?.uid
+                                if (userId != null) {
+                                    loginViewModel.saveReadingList(userId, bookList)
+                                }
+
+                            }
+                        ) {
+                            Icon(
+                                Icons.Default.Delete,
+                                contentDescription = "Delete",
+                                tint = Color.Red
+                            )
+                        }
                     }
                 }
             }
-
-
         }
     }
 
@@ -322,14 +363,16 @@ fun ReadingListContent(bookList: List<String>, onBookClick: (Int, String) -> Uni
                                 if (bookItems.isNotEmpty()) {
                                     val bookItem = bookItems[0]
                                     val imageUrl = bookItem.volumeInfo.imageLinks?.thumbnail ?: ""
-                                    val updatedImageUrl = if (imageUrl.isNotEmpty() && imageUrl != bookItem.volumeInfo.imageLinks?.thumbnail) {
-                                        // Book image URL has changed, force refresh the image by appending a timestamp query parameter
-                                        "$imageUrl?timestamp=${System.currentTimeMillis()}"
-                                    } else {
-                                        imageUrl
-                                    }
+                                    val updatedImageUrl =
+                                        if (imageUrl.isNotEmpty() && imageUrl != bookItem.volumeInfo.imageLinks?.thumbnail) {
+                                            // Book image URL has changed, force refresh the image by appending a timestamp query parameter
+                                            "$imageUrl?timestamp=${System.currentTimeMillis()}"
+                                        } else {
+                                            imageUrl
+                                        }
                                     val updatedBookWithDetails = updatedBook.copy(
-                                        author = bookItem.volumeInfo.authors?.joinToString(", ") ?: "",
+                                        author = bookItem.volumeInfo.authors?.joinToString(", ")
+                                            ?: "",
                                         imageUrl = updatedImageUrl
                                     )
 
@@ -356,7 +399,6 @@ fun ReadingListContent(bookList: List<String>, onBookClick: (Int, String) -> Uni
         )
     }
 }
-
 
 @Composable
 fun ListBookCoverImage(url: String) {

@@ -128,7 +128,7 @@ fun TopTrendingBooks() {
     // Fetch the top 10 trending books
     LaunchedEffect(true) {
         val response = withContext(Dispatchers.IO) {
-            service.searchBooks("bestseller", 5, "relevance")
+            service.searchBooks("bestseller", 10, "relevance")
         }
         if (response.isSuccessful) {
             val bookItems = response.body()?.items ?: emptyList()
